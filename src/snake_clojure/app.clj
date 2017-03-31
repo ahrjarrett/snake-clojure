@@ -97,8 +97,34 @@
            and checks if any part of it overlaps w/ the apple"
   (= head apple))
 
+; -------------------------------------------------------------
+; mutable model
+; -------------------------------------------------------------
+(defn update-positions [snake apple]
+  "@: new syntax, check cheatsheet
+   can't tell if nil is an arg to dosync or an alternative to if"
+  (dosync
+    (if (eats? @snake @apple)
+      (do
+        (ref-set apple (create-apple))
+        (alter snake move :grow))
+      (alter snake move)))
+  nil)
 
+(defn update-direction [snake direction]
+  (dosync (alter snake turn direction))
+  nil)
 
+(defn reset-game [snake apple]
+  "Snake and apple are not maps, in this case, but refs"
+  (dosync
+    (ref-set snake (create-snake))
+    (ref-set apple (create-apple)))
+  nil) ; <= ahh, looks like its usually the last arg passed to dosync
+
+; -------------------------------------------------------------
+; gui
+; -------------------------------------------------------------
 
 
 

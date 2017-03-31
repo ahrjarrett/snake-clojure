@@ -1,6 +1,6 @@
 # snake-clojure
 
-A Clojure library based on Stuart Halloway’s Snake.
+### A Clojure project based on [Stuart Halloway’s Snake](https://github.com/stuarthalloway/programming-clojure).
 
 Namespace is examples.snake and the core.clj file that Leiningen created has been renamed app.clj.
 

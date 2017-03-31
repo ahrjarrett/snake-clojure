@@ -83,10 +83,18 @@
     (< head-y 0)))
 
 (defn lose? [{[head & body] :body}]
+  "Takes one parameter, a snake map, destructures it
+  - it takes the value of body of that map, expects it
+  - to be a vector, and assigns the first element of th
+  - vector to head, and all the rest of the remaining elements
+  - to body w/ &"
   (or (head-overlaps-body? head body)
       (head-outside-bounds? head)))
 
 (defn eats? [{[head] :body} {apple :location}]
+  "Two parameters, both maps, the first a snake;
+  - [head] takes the first value (vector head)
+           and checks if any part of it overlaps w/ the apple"
   (= head apple))
 
 

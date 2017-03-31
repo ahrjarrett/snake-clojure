@@ -20,7 +20,7 @@
    KeyEvent/VK_UP [0 -1]
    KeyEvent/VK_DOWN [0 1]})
 
-; initializing functions
+; functions
 (defn create-snake []
   "Initializes a map of the snake’s properties, i.e. the
    - initial direction; has a type keyword to distinguish
@@ -48,12 +48,52 @@
   ; the syntax/destructuring on the arguments is hazy to me ATM
 
 (defn move [{:keys [body direction] :as snake} & grow]
+  "Takes a snake and moves it by returning a new snake
+  - & grow: indicates that it is a rest parameter, which means
+  -         additional arguments are going to be bound into a seq
+  - assoc docs: (assoc map key val)
+                https://clojuredocs.org/clojure.core/assoc
+  - cons: takes a value, and then a sequence
+  - let: logically every time the snake takes a step its head is in one
+         position over from where it was in the direction of travel
+  - if: if grow is true return body, otherwise returns a new sequence
+        of everything but the last element of body"
   (assoc snake :body
     (cons
       (let [[head-x head-y] (first body)
             [dir-x dir-y] direction]
         [(+ head-x dir-y) (+ head-y dir-y)])
       (if grow body (butlast body)))))
+      ; the syntax for the argument destructuring still feels pretty damn weird
+
+(defn turn [snake-direction]
+  (assoc snake :direction direction))
+
+(defn win? [{body :body}]
+  (>= (count body) win-length))
+
+(defn head-overlaps-body? [head body]
+  (contains? (set body) head))
+
+(defn head-outside-bounds? [[head-x head-y]]
+  (or
+    (> head-x field-width)
+    (< head-x 0)
+    (> head-y field-height)
+    (< head-y 0)))
+
+(defn lose? [{[head & body] :body}]
+  (or (head-overlaps-body? head body)
+      (head-outside-bounds? head)))
+
+(defn eats? [{[head] :body} {apple :location}]
+  (= head apple))
+
+
+
+
+
+
 
 
 
